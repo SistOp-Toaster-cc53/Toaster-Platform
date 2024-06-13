@@ -1,3 +1,5 @@
+using Cafeteria.Toaster.API.Shared.Application.Internal.MongoDBServices;
+using Cafeteria.Toaster.API.Shared.Domain.Model.Settings;
 using Cafeteria.Toaster.API.Shared.Domain.Repositories;
 using Cafeteria.Toaster.API.Shared.Infrastructure.Persistence.Relational.EFC.Configuration;
 using Cafeteria.Toaster.API.Shared.Infrastructure.Persistence.Relational.EFC.Repositories;
@@ -6,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// MongoDB Configuration
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddSingleton<MongoDbService>();
 
 // Add services to the container.
 builder.Services.AddControllers(options => options.Conventions.Add(new KebabCaseRouteNamingConvention()));

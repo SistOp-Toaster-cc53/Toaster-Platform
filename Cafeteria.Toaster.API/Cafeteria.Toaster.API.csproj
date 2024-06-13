@@ -16,7 +16,10 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.6" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
+        <PackageReference Include="MongoDB.Bson" Version="2.26.0" />
+        <PackageReference Include="MongoDB.Driver" Version="2.26.0" />
         <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.2" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
@@ -26,7 +29,6 @@
     <ItemGroup>
       <Folder Include="IAM\" />
       <Folder Include="Shared\Infrastructure\Persistence\NonRelational\" />
-      <Folder Include="Social\" />
     </ItemGroup>
 
 </Project>

@@ -1,3 +1,14 @@
+using ACME.LearningCenterPlatform.API.IAM.Application.Internal.CommandServices;
+using ACME.LearningCenterPlatform.API.IAM.Application.Internal.OutboundServices;
+using ACME.LearningCenterPlatform.API.IAM.Application.Internal.QueryServices;
+using ACME.LearningCenterPlatform.API.IAM.Domain.Repositories;
+using ACME.LearningCenterPlatform.API.IAM.Domain.Services;
+using ACME.LearningCenterPlatform.API.IAM.Infrastructure.Hashing.BCrypt.Services;
+using ACME.LearningCenterPlatform.API.IAM.Infrastructure.Persistence.EFC.Repositories;
+using ACME.LearningCenterPlatform.API.IAM.Infrastructure.Tokens.JWT.Configuration;
+using ACME.LearningCenterPlatform.API.IAM.Infrastructure.Tokens.JWT.Services;
+using ACME.LearningCenterPlatform.API.IAM.Interfaces.ACL;
+using ACME.LearningCenterPlatform.API.IAM.Interfaces.ACL.Services;
 using Cafeteria.Toaster.API.Shared.Application.Internal.MongoDBServices;
 using Cafeteria.Toaster.API.Shared.Domain.Model.Settings;
 using Cafeteria.Toaster.API.Shared.Domain.Repositories;
@@ -65,6 +76,17 @@ builder.Services.AddSwaggerGen(c =>
 // Shared Bounded Context Injection Configuration
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+// IAM Bounded Context Injection Configuration
+builder.Services.Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserCommandService, UserCommandService>();
+builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IHashingService, HashingService>();
+builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
+
+
 var app = builder.Build();
 
 // Verify Database Objects are created
@@ -74,6 +96,9 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
 }
+
+app.UseCors("AllowAllPolicy");
+
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();

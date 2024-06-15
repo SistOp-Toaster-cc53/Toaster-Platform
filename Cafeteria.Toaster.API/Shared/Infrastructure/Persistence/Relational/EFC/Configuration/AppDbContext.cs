@@ -1,4 +1,5 @@
-﻿using Cafeteria.Toaster.API.Profiles.Domain.Model.Aggregates;
+﻿using ACME.LearningCenterPlatform.API.IAM.Domain.Model.Aggregates;
+using Cafeteria.Toaster.API.Profiles.Domain.Model.Aggregates;
 using Cafeteria.Toaster.API.Profiles.Domain.Model.Entities;
 using Cafeteria.Toaster.API.Shared.Infrastructure.Persistence.Relational.EFC.Configuration.Extensions;
 using EntityFrameworkCore.CreatedUpdatedDate.Extensions;
@@ -38,6 +39,11 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .WithMany(p => p.Influencers)
             .HasForeignKey(pf => pf.InfluencerId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.Entity<User>().HasKey(u => u.Id);
+        builder.Entity<User>().Property(u => u.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Entity<User>().Property(u => u.Username).IsRequired();
+        builder.Entity<User>().Property(u => u.PasswordHash).IsRequired();
         
         // Apply SnakeCase Naming Convention
         builder.UseSnakeCaseWithPluralizedTableNamingConvention();

@@ -1,24 +1,23 @@
-﻿# Etapa de construcción
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /source
-
-# Copia el archivo del proyecto y restaura las dependencias
-COPY ["Cafeteria.Toaster.API.csproj", "./"]
-RUN dotnet restore "Cafeteria.Toaster.API.csproj" --disable-parallel
-
-# Copia el resto de los archivos del proyecto y realiza la publicación
-COPY . .
-RUN dotnet publish "Cafeteria.Toaster.API.csproj" -c Release -o /app/publish
-
-# Etapa de tiempo de ejecución
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
 WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
 
-# Copia los archivos publicados desde la etapa de construcción
-COPY --from=build /app/publish .
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["Cafeteria.Toaster.API/Cafeteria.Toaster.API.csproj", "Cafeteria.Toaster.API/"]
+RUN dotnet restore "Cafeteria.Toaster.API/Cafeteria.Toaster.API.csproj"
+COPY . .
+WORKDIR "/src/Cafeteria.Toaster.API"
+RUN dotnet build "Cafeteria.Toaster.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Expone el puerto en el que se ejecuta la aplicación
-EXPOSE 5000
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Cafeteria.Toaster.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Define el comando de entrada para ejecutar la aplicación
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Cafeteria.Toaster.API.dll"]

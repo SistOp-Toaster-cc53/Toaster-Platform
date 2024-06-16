@@ -1,0 +1,32 @@
+﻿version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Pillin88#
+      MYSQL_DATABASE: toaster
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - my_network
+
+  cafeteria.toaster.api:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Cafeteria.Toaster.API/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: "server=db;user=root;password=Pillin88#;database=toaster"
+    networks:
+      - my_network
+
+volumes:
+  db_data: {}
+
+networks:
+  my_network:

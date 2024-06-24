@@ -1,0 +1,22 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.8"
+services:
+  cafeteria.toaster.api:
+    build:
+      context: "C:\\Users\\ASUS\\WebstormProjects\\Toaster-Platform"
+      dockerfile: "Cafeteria.Toaster.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Cafeteria.Toaster.API.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "cafeteria.toaster.api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\ASUS\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\Users\\ASUS\\WebstormProjects\\Toaster-Platform\\Cafeteria.Toaster.API:/app:rw"
+    - "C:\\Users\\ASUS\\WebstormProjects\\Toaster-Platform:/src:rw"
+    working_dir: "/app"

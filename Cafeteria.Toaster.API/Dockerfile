@@ -7,10 +7,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Cafeteria.Toaster.API/Cafeteria.Toaster.API.csproj", "Cafeteria.Toaster.API/"]
-RUN dotnet restore "Cafeteria.Toaster.API/Cafeteria.Toaster.API.csproj"
+COPY ["Cafeteria.Toaster.API.csproj", "."]
+RUN dotnet restore "Cafeteria.Toaster.API.csproj"
 COPY . .
-WORKDIR "/src/Cafeteria.Toaster.API"
+WORKDIR "/src"
 RUN dotnet build "Cafeteria.Toaster.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish

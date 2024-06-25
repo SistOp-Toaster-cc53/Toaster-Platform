@@ -107,7 +107,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-app.UseCors("AllowAllPolicy");
+app.UseCors("AllowedAllPolicy");
 
 
 // Configure the HTTP request pipeline.

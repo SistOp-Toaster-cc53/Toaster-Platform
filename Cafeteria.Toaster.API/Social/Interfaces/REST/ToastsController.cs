@@ -27,4 +27,5 @@ public class ToastsController : ControllerBase
         await _mongoDbService.CreateToastAsync(toast);
         return CreatedAtAction(nameof(GetAll), new { id = toast.Id }, toast);
     }
+
 }

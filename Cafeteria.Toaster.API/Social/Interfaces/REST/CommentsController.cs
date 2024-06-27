@@ -27,4 +27,17 @@ public class CommentsController : ControllerBase
         await _mongoDbService.CreateCommentAsync(comment);
         return CreatedAtAction(nameof(GetAll), new { id = comment.Id }, comment);
     }
+    
+    [HttpGet("{postId}")]
+    public async Task<ActionResult<Post>> GetPostById(string postId)
+    {
+        var post = await _mongoDbService.GetPostByIdAsync(postId);
+
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        return post;
+    }
 }

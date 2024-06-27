@@ -56,6 +56,13 @@ public class MongoDbService
         return await _postsCollection.Find(new BsonDocument()).ToListAsync();
     }
     
+    public async Task<bool> DeletePostAsync(string id)
+    {
+        var filter = Builders<Post>.Filter.Eq(post => post.Id, id);
+        var result = await _postsCollection.DeleteOneAsync(filter);
+        return result.DeletedCount > 0;
+    }
+    
     public async Task CreateCommentAsync(Comment comment)
     {
         await _commentsCollection.InsertOneAsync(comment);
@@ -65,5 +72,23 @@ public class MongoDbService
     public async Task<List<Comment>> GetAllComentsAsync()
     {
         return await _commentsCollection.Find(new BsonDocument()).ToListAsync();
+    }
+    
+    public async Task<Post> GetPostByIdAsync(string id)
+    {
+        var filter = Builders<Post>.Filter.Eq(post => post.Id, id);
+        return await _postsCollection.Find(filter).FirstOrDefaultAsync();
+    }
+    
+    public async Task<Post> GetPostByCommentIdAsync(string commentId)
+    {
+        var filter = Builders<Post>.Filter.AnyEq(post => post.Comments, commentId);
+        return await _postsCollection.Find(filter).FirstOrDefaultAsync();
+    }
+    
+    public async Task UpdatePostAsync(string id, Post post)
+    {
+        var filter = Builders<Post>.Filter.Eq(existingPost => existingPost.Id, id);
+        await _postsCollection.ReplaceOneAsync(filter, post);
     }
 }

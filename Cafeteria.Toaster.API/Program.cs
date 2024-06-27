@@ -75,9 +75,9 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowedAllPolicy",
+    options.AddPolicy("CustomCORS",
         policy => policy
-            .AllowAnyOrigin()
+            .WithOrigins("http://4.203.104.253:4200", "http://localhost:5178", "http://localhost:5281", "http://localhost:5177")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
@@ -115,6 +115,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseCors("CustomCORS");
 
 app.UseAuthorization();
 

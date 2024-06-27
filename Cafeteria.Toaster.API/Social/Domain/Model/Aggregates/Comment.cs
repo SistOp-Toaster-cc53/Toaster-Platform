@@ -11,6 +11,7 @@ public class Comment
     public UserReference User { get; set; }
     public IEnumerable<string> Comments { get; set; }
     public IEnumerable<string> Toasts { get; set; }
+    public IEnumerable<string> Posts { get; set; }
     public IEnumerable<string> Likes { get; set; }
     public int LikeCount { get; set; }
     public string Content { get; set; } = null!;

@@ -24,6 +24,9 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Profile>().HasKey(p => p.Id);
         builder.Entity<Profile>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
         builder.Entity<Profile>().Property(p => p.Username).IsRequired();
+        builder.Entity<Profile>().Property(p => p.ProfileUrl).IsRequired();
+        builder.Entity<Profile>().Property(p => p.BackgroundUrl).IsRequired();
+        builder.Entity<Profile>().Property(p => p.Description).IsRequired();
         
         builder.Entity<Follow>()
             .HasKey(pf => new { pf.FollowerId, pf.InfluencerId });

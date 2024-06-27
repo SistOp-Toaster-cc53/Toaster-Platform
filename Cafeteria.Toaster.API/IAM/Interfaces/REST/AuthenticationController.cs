@@ -3,6 +3,7 @@ using ACME.LearningCenterPlatform.API.IAM.Domain.Services;
 using ACME.LearningCenterPlatform.API.IAM.Infrastructure.Pipeline.Middleware.Attributes;
 using ACME.LearningCenterPlatform.API.IAM.Interfaces.REST.Resources;
 using ACME.LearningCenterPlatform.API.IAM.Interfaces.REST.Transform;
+using Cafeteria.Toaster.API.Profiles.Interfaces.ACL;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ACME.LearningCenterPlatform.API.IAM.Interfaces.REST;
@@ -11,7 +12,7 @@ namespace ACME.LearningCenterPlatform.API.IAM.Interfaces.REST;
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-public class AuthenticationController(IUserCommandService userCommandService) : ControllerBase
+public class AuthenticationController(IUserCommandService userCommandService, IProfilesContextFacade profilesContextFacade) : ControllerBase
 {
     /**
      * <summary>
@@ -45,6 +46,7 @@ public class AuthenticationController(IUserCommandService userCommandService) : 
     {
         var signUpCommand = SignUpCommandFromResourceAssembler.ToCommandFromResource(signUpResource);
         await userCommandService.Handle(signUpCommand);
+        await profilesContextFacade.CreateProfile(signUpResource.Username);
         return Ok(new { message = "User created successfully" });
     }
 }

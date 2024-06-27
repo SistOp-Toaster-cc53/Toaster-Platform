@@ -9,6 +9,13 @@ using ACME.LearningCenterPlatform.API.IAM.Infrastructure.Tokens.JWT.Configuratio
 using ACME.LearningCenterPlatform.API.IAM.Infrastructure.Tokens.JWT.Services;
 using ACME.LearningCenterPlatform.API.IAM.Interfaces.ACL;
 using ACME.LearningCenterPlatform.API.IAM.Interfaces.ACL.Services;
+using Cafeteria.Toaster.API.Profiles.Application.Internal.CommandServices;
+using Cafeteria.Toaster.API.Profiles.Application.Internal.QueryServices;
+using Cafeteria.Toaster.API.Profiles.Domain.Repositories;
+using Cafeteria.Toaster.API.Profiles.Domain.Services;
+using Cafeteria.Toaster.API.Profiles.Infrastructure.Persistence.EFC.Repositories;
+using Cafeteria.Toaster.API.Profiles.Interfaces.ACL;
+using Cafeteria.Toaster.API.Profiles.Interfaces.ACL.Services;
 using Cafeteria.Toaster.API.Shared.Application.Internal.MongoDBServices;
 using Cafeteria.Toaster.API.Shared.Domain.Model.Settings;
 using Cafeteria.Toaster.API.Shared.Domain.Repositories;
@@ -77,7 +84,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CustomCORS",
         policy => policy
-            .WithOrigins("http://4.203.104.253:4200", "http://localhost:5178", "http://localhost:5281", "http://localhost:5177")
+            .WithOrigins("http://4.203.104.253:4200", "http://localhost:5178", "http://localhost:5281", "http://localhost:5177", "http://localhost:5173")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
@@ -96,6 +103,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IHashingService, HashingService>();
 builder.Services.AddScoped<IIamContextFacade, IamContextFacade>();
 
+// Profile Bounded Context Injection Configuration
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IProfileCommandService, ProfileCommandService>();
+builder.Services.AddScoped<IProfileQueryService, ProfileQueryService>();
+builder.Services.AddScoped<IProfilesContextFacade, ProfilesContextFacade>();
 
 var app = builder.Build();
 

@@ -28,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Profiles\Domain\Model\Commands\" />
       <Folder Include="Shared\Infrastructure\Persistence\NonRelational\" />
     </ItemGroup>
 

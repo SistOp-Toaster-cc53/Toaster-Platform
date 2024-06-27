@@ -42,6 +42,14 @@ public class PostsController : ControllerBase
         }
     }
     
+    [HttpGet("/author/{author}")]
+    public async Task<List<Post>> GetPostsByAuthor(string author)
+    {
+        var post = await _mongoDbService.GetPostsByAuthor(author);
+        return post;
+    }
+
+    
     [HttpGet("{commentId}")]
     public async Task<ActionResult<Post>> GetPostByCommentId(string commentId)
     {

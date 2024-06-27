@@ -81,6 +81,11 @@ namespace ACME.LearningCenterPlatform.API.IAM.Application.Internal.CommandServic
             {
                 throw new ArgumentNullException(nameof(command));
             }
+            
+            if (String.IsNullOrEmpty(command.Username) || String.IsNullOrEmpty(command.Password))
+            {
+                throw new Exception("Username or password cannot be null");
+            }
 
             if (_userRepository.ExistsByUsername(command.Username))
             {

@@ -1,6 +1,7 @@
 ﻿using System.Net.Mime;
 using Cafeteria.Toaster.API.Profiles.Domain.Model.Queries;
 using Cafeteria.Toaster.API.Profiles.Domain.Services;
+using Cafeteria.Toaster.API.Profiles.Interfaces.REST.Resources;
 using Cafeteria.Toaster.API.Profiles.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,16 @@ public class ProfilesController(IProfileCommandService profileCommandService, IP
         var getProfileByUsernameQuery = new GetProfileByUsernameQuery(username);
         var profile = await profileQueryService.Handle(getProfileByUsernameQuery);
         if (profile == null) return NotFound();
+        var profileResource = ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile);
+        return Ok(profileResource);
+    }
+    
+    [HttpPut]
+    public async Task<IActionResult> EditProfile(EditProfileResource editProfileResource)
+    {
+        var editProfileCommand = EditProfileCommandFromResourceAssembler.ToCommandFromResource(editProfileResource);
+        var profile = await profileCommandService.Handle(editProfileCommand);
+        if (profile == null) return BadRequest();
         var profileResource = ProfileResourceFromEntityAssembler.ToResourceFromEntity(profile);
         return Ok(profileResource);
     }

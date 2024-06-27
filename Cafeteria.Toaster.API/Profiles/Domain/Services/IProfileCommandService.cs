@@ -6,4 +6,5 @@ namespace Cafeteria.Toaster.API.Profiles.Domain.Services;
 public interface IProfileCommandService
 {
     Task<Profile?> Handle(CreateProfileCommand command);
+    Task<Profile?> Handle(EditProfileCommand command);
 }

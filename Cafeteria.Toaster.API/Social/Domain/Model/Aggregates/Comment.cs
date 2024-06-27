@@ -8,6 +8,8 @@ public class Comment
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
+    public string Username { get; set; }
+    public string UserPhoto { get; set; }
     public UserReference User { get; set; }
     public IEnumerable<string> Comments { get; set; }
     public IEnumerable<string> Toasts { get; set; }

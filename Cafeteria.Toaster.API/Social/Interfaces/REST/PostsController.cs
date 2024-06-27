@@ -1,5 +1,6 @@
 ﻿using Cafeteria.Toaster.API.Shared.Application.Internal.MongoDBServices;
 using Cafeteria.Toaster.API.Social.Domain.Model.Aggregates;
+using Cafeteria.Toaster.API.Social.Interfaces.REST.Resources;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cafeteria.Toaster.API.Social.Interfaces.REST;
@@ -78,6 +79,34 @@ public class PostsController : ControllerBase
         }
 
         await _mongoDbService.UpdatePostAsync(id, post);
+        return NoContent();
+    }
+    
+    [HttpPut("{id}/like")]
+    public async Task<IActionResult> changeLikes(string id, [FromBody] EditLikesResource resource)
+    {
+        var post = await _mongoDbService.GetPostByIdAsync(id);
+        if (post == null)
+        {
+            return NotFound();
+        }
+        
+        // Work with the original collection directly
+        var likesList = post.Likes.ToList();
+        
+        if (!likesList.Contains(resource.Username))
+        {
+            post.LikeCount++;
+            likesList.Add(resource.Username);
+        }
+        else
+        {
+            post.LikeCount--;
+            likesList.Remove(resource.Username);
+        }
+
+        post.Likes = likesList; // Update the list of likes
+        await _mongoDbService.UpdatePostLikesAsync(id, post);
         return NoContent();
     }
 }

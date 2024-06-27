@@ -103,4 +103,14 @@ public class MongoDbService
         var filter = Builders<Post>.Filter.Eq(existingPost => existingPost.Id, id);
         await _postsCollection.ReplaceOneAsync(filter, post);
     }
+    
+    // change likes and likeCount
+    public async Task UpdatePostLikesAsync(string id, Post post)
+    {
+        var filter = Builders<Post>.Filter.Eq(existingPost => existingPost.Id, id);
+        var update = Builders<Post>.Update
+            .Set(existingPost => existingPost.Likes, post.Likes)
+            .Set(existingPost => existingPost.LikeCount, post.LikeCount);
+        await _postsCollection.UpdateOneAsync(filter, update);
+    }
 }

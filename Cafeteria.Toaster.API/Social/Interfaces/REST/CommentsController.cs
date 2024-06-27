@@ -29,15 +29,10 @@ public class CommentsController : ControllerBase
     }
     
     [HttpGet("{postId}")]
-    public async Task<ActionResult<Post>> GetPostById(string postId)
+    public async Task<List<Comment>> GetPostById(string postId)
     {
-        var post = await _mongoDbService.GetPostByIdAsync(postId);
+        var comments = await _mongoDbService.GetCommentsByPostId(postId);
 
-        if (post == null)
-        {
-            return NotFound();
-        }
-
-        return post;
+        return comments;
     }
 }

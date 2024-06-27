@@ -17,4 +17,6 @@ public class Comment
     public string Content { get; set; } = null!;
     public string Image { get; set; } = null!;
     public DateTime DateCreated { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string PostId { get; set; }
 }

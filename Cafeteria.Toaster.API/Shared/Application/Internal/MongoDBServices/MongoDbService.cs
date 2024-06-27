@@ -80,6 +80,12 @@ public class MongoDbService
         return await _postsCollection.Find(filter).FirstOrDefaultAsync();
     }
     
+    public async Task<List<Comment>> GetCommentsByPostId(string postId)
+    {
+        var filter = Builders<Comment>.Filter.Eq(comment => comment.PostId, postId);
+        return await _commentsCollection.Find(filter).ToListAsync();
+    }
+    
     public async Task<List<Post>> GetPostsByAuthor(string username)
     {
         var filter = Builders<Post>.Filter.Eq(post => post.User.Username, username);
